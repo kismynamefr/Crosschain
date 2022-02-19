@@ -1,46 +1,41 @@
 import './App.css'
-import { React, useEffect, useState } from 'react'
-import { FOXIE_ABI, FOXIE_ADDRESS } from './abi/foxieabi.js'
-import { CONTRACT_ABI, CONTRACT_ADDRESS } from './abi/contractabi.js'
+import { React, useEffect, useState} from 'react'
 
 const axios = require('axios')
 const Web3 = require('web3')
-
 function App() {
   const web3 = new Web3(Web3.givenProvider)
-
-  const foxieabi = new web3.eth.Contract(FOXIE_ABI, FOXIE_ADDRESS)
-  const contractabi = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS)
-  const [account, setAccount] = useState([])
-
-  const handleConnectMetamask = async() => {
-    if(account.lenght === 0)
-      await web3.eth.requestAccounts() && await web3.eth.getAccounts().then(account => {
-        setAccount(account[0])
-      })
+  const [dataRes, setDataRes] = useState();
+  const [balance, setBalance] = useState();
+  // const [network, setNetWork] = useState();
+  const getAccount = async() => {
+    const account = await web3.eth.getAccounts()
+    const balance = await web3.eth.getBalance(account[0])
+    const balanceFix = web3.utils.fromWei(balance, 'ether');
+    setBalance(balanceFix)
   }
-  const sendToContract = async () => {
-    const amount = document.getElementById('amount').value;
-    const address = document.getElementById('address').value;
-    console.log('here', amount, address)
+  let getNetwork = "";
 
-    console.log("Has Cliked")
-    await foxieabi.methods.approve(address, web3.utils.toWei(amount, 'ether')).send({ from: account })
-    await foxieabi.methods.transfer(address, web3.utils.toWei(amount, 'ether')).send({ from: account })
+  const getDataChainid = async () => {
+    const getChainId = await web3.eth.getChainId();
+    await axios({
+      method: 'get',
+      url: 'http://localhost:3001/chainids',
+      responseType: 'chainid'
+    }).then(datas => {
+      for(let i = 0; i<4; i++)
+        if(getChainId == datas.data[i].chainId)
+          getNetwork = datas.data[i].network
+          setDataRes(getNetwork)
+    })
   }
-  const withDraw = async () => {
-    const balanceOf = await foxieabi.methods.balanceOf(CONTRACT_ADDRESS).call()
-    await contractabi.methods.withDraw(balanceOf, FOXIE_ADDRESS).send({ from: account }).then(rep => console.log(rep));
-  }
-  const getData = async () => {
-    axios.get('http://localhost:3000/users')
-    .then(res => console.log("Axios Res", res.data))
-    .catch(err => console.log("error:", err))
-  }
-
-  useEffect(async () => {
-    handleConnectMetamask
-  }, [account]);
+  useEffect(async() => {
+    getDataChainid()
+    getAccount()
+    await window.ethereum.on('chainChanged', (chainId) => {
+        setDataRes(chainId)
+    })
+  }, [dataRes]);
 
 
   return (
@@ -85,36 +80,25 @@ function App() {
             <div className="formbg-outer">
               <div className="formbg">
                 <div className="formbg-inner padding-horizontal--48">
-                  <span className="padding-bottom--15">{"Account:" + account}</span>
+                  <span className="padding-bottom--15"></span>
                   {/* <form id="stripe-login"> */}
+                  <div className="field">
+                    <label>{dataRes}</label>
+                    <input type='' id='amount' placeholder='Deposit Amount' />
+                    <label style={{"padding": 10}}>Balance: {balance}</label>
+                  </div>
                   <div className="field padding-bottom--24">
-                    <label>Token Foxie</label>
+                    <select style={{"padding": 5}} placeholder={"Choose network to swap"}>
+                      <option value={"Ethereum Mainet"}>Ethereum Mainet</option>
+                      <option value={"Ethereum Mainet"}>Ethereum Mainet</option>
+                      <option value={"Ethereum Mainet"}>Ethereum Mainet</option>
+                      <option value={"Ethereum Mainet"}>Ethereum Mainet</option>
+                      <option value={"Ethereum Mainet"}>Ethereum Mainet</option>
+                    </select>
                     <input type='' id='amount' placeholder='Deposit Amount' />
                   </div>
                   <div className="field padding-bottom--24">
-                    <div className="grid--50-50">
-                      <label>Send Adress To</label>
-                      <div className="reset-pass">
-                        <a onClick={handleConnectMetamask} style={{"cursor":"pointer"}}>{"Connect Metamask"}</a>  
-                      </div>
-                    </div>
-                    <input type="" id="address" placeholder='Address' />
-                  </div>
-                  <div className="field field-checkbox padding-bottom--24 flex-flex align-center">
-                    <label>
-                      <input type="checkbox" name="checkbox" /> Stay signed in for a week
-                    </label>
-                  </div>
-                  <div className="field padding-bottom--24">
-                    <input type="submit" name="submit" value={"Send"} onClick={sendToContract} />
-                  </div>
-
-                  {/* </form> */}
-                  <div className="field padding-bottom--24">
-                    <input type="submit" name="submit" value={"withDraw"} onClick={withDraw} />
-                  </div>
-                  <div className="field padding-bottom--24">
-                    <input type="submit" name="submit" value={"getData"} onClick={getData} />
+                    <input type="submit" name="submit" value={"SWAP"}/>
                   </div>
                 </div>
               </div>
