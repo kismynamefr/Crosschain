@@ -7,9 +7,10 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
-  const Contract = await ethers.getContractFactory("MyContract");
+  const Contract = await ethers.getContractFactory("Crosschain");
   const contract = await Contract.deploy();
-
+  console.log("Deploying....");
+  await contract.deployed();
   console.log("Contract address here:", contract.address);
 }
 

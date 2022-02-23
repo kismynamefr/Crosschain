@@ -22,6 +22,11 @@ html {
     border: none;
     
   }
+  .btn-primary{
+    color: #5469d4;
+    background-color: white;
+    border-color: #5469d4 !important;
+  }
   .btn-3 span {
     position: relative;
     display: block;

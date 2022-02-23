@@ -3,8 +3,9 @@ pragma solidity >=0.8.0;
 import "./IERC20.sol";
 
 contract MyContract{
+    address contractAddr;
     constructor(){
-        
+        contractAddr = msg.sender;
     }
 
     event Approval(address owner, address spender, uint256 value);
@@ -22,6 +23,7 @@ contract MyContract{
     }
     function withDraw(uint256 _amount, IERC20 _token) external payable returns(bool){
         require(_token.balanceOf(address(this)) >= _amount, "Not enough money");
+        require(msg.sender == contractAddr, "You aren't Owner");
         _token.transfer(msg.sender, _amount);
         emit Transfer(address(this), msg.sender, _amount);
         return true;

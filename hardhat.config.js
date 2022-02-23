@@ -5,24 +5,16 @@ require("@nomiclabs/hardhat-waffle");
 require("hardhat-gas-reporter");
 require("solidity-coverage");
 
-// This is a sample Hardhat task. To learn how to create your own go to
-// https://hardhat.org/guides/create-task.html
-// task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
-//   const accounts = await hre.ethers.getSigners();
-
-//   for (const account of accounts) {
-//     console.log(account.address);
-//   }
-//   console.log(process.env.AVAX_URL)
-//   console.log(process.env.PRIVATE_KEY)
-// });
-
 module.exports = {
   solidity: "0.8.4",
   networks: {
-    fuji: {
-      url: process.env.AVAX_URL,
-      accounts: [`${process.env.PRIVATE_KEY}`],
+    ropsten: {
+      url: "https://eth-ropsten.alchemyapi.io/v2/a4V3Hu3w_K6Uvjfb8DVXpYfuYmbaFWHp",
+      accounts: [`8c010bd222587fea251d21c1b2ed9f4fe08a94207a4e22e9aed8187d7890c64a`],
+    },
+    rinkeby: {
+      url: "https://eth-rinkeby.alchemyapi.io/v2/d5jl96uz-JVZRnR4LtYWZVsibWP4wYaz",
+      accounts: [`8c010bd222587fea251d21c1b2ed9f4fe08a94207a4e22e9aed8187d7890c64a`],
     },
   },
   gasReporter: {

@@ -6,7 +6,7 @@ module.exports = {
     es6: true,
     jest: true,
   },
-  extends: ["eslint:recommended", "plugin:react/recommended"],
+  extends: ["plugin:react/recommended"],
   globals: {},
   parser: "babel-eslint",
   parserOptions: {
