@@ -363,4 +363,5 @@ export const FOXIE_ABI = [
       "type": "function"
     }
   ]
-export const FOXIE_ADDRESS = '0x3c8e063Bf671a3E3aea8E625935075e6b3440557'
+export const FOXIE_ROPSTEN = '0x101A0caa90138BBb55500c982Ce7581830Aa815F'
+export const FOXIE_RINKEBY = '0x3c8e063Bf671a3E3aea8E625935075e6b3440557'
