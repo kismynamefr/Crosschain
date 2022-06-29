@@ -16,6 +16,10 @@ module.exports = {
       url: "https://eth-rinkeby.alchemyapi.io/v2/d5jl96uz-JVZRnR4LtYWZVsibWP4wYaz",
       accounts: [`8c010bd222587fea251d21c1b2ed9f4fe08a94207a4e22e9aed8187d7890c64a`],
     },
+    avax: {
+      url: "https://speedy-nodes-nyc.moralis.io/3cf3d71c0fa355b4ec6810a8/avalanche/testnet",
+      accounts: [`8c010bd222587fea251d21c1b2ed9f4fe08a94207a4e22e9aed8187d7890c64a`],
+    }
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
